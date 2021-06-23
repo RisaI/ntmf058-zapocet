@@ -1,0 +1,127 @@
+
+int OutPoints = -10;
+int InPoints  =  5;
+
+
+int Outer = 1;
+int Inner = 2;
+
+
+// ### Outer borders ###
+
+border OutRect0(t=0., 1.){x=t;   y=1; label=Outer;}
+border OutRect1(t=0., 1.){x=1;   y=1-t; label=Outer;}
+border OutRect2(t=0., 1.){x=1-t; y=0; label=Outer;}
+border OutRect3(t=0., 1.){x=0;   y=t; label=Outer;}
+
+border OutGArc(t= 1.0, 0.5){x=1.0 + cos(t * pi); y=sin(t * pi); label=Outer;}
+
+border OutHl(t=0., 0.5){x=t; y=2.0*t; label=Outer;}
+border OutHr(t=0., 0.5){x=0.5+t; y=1-2.0*t; label=Outer;}
+
+border OutI0(t=0.25, 0.75){x=t;      y=1; label=Outer;}
+border OutI1(t=0.75, 1.00){x=t;      y=1.75-t; label=Outer;}
+border OutI2(t=0.25, 0.75){x=1;      y=1.0-t; label=Outer;}
+border OutI3(t=0.00, 0.25){x=1.0-t;  y=0.25-t; label=Outer;}
+border OutI4(t=0.25, 0.75){x=1-t;    y=0; label=Outer;}
+border OutI5(t=0.00, 0.25){x=0.25-t; y=t; label=Outer;}
+border OutI6(t=0.25, 0.75){x=0;      y=t; label=Outer;}
+border OutI7(t=0.00, 0.25){x=t;      y=0.75+t; label=Outer;}
+
+
+// ### Inner borders ###
+
+border A0(t=0.25, 0.75) { x = t;        y = 0.75; label=Inner; }
+border A1(t=0.25, 0.75) { x = 0.75;     y = 1.00 - t; label=Inner; }
+border A2(t=0.25, 0.75) { x = 1.00 - t; y = 0.25; label=Inner; }
+border A3(t=0.25, 0.75) { x = 0.25;     y = t; label=Inner; }
+
+border B0(t=0.0, 0.25) { x = 0.50 + t; y = 0.75 - t; label=Inner; }
+border B1(t=0.0, 0.25) { x = 0.75 - t; y = 0.50 - t; label=Inner; }
+border B2(t=0.0, 0.25) { x = 0.50 - t; y = 0.25 + t; label=Inner; }
+border B3(t=0.0, 0.25) { x = 0.25 + t; y = 0.50 + t; label=Inner; }
+
+border C0(t=0.0, 0.5) { x = 0.5 + t / 2.0; y = 0.75 - t; label=Inner; }
+// C1 = A2;
+border C2(t=0.0, 0.5) { x = 0.25 + t / 2.0; y = 0.25 + t; label=Inner; }
+
+// D0 = A1
+// D1 = A2
+border D2(t=0.0, 0.5) { x = 0.25 + t; y = 0.25 + t; label=Inner; }
+
+border E0(t=0.0, 2.0 * pi) { x = 0.5 + 0.25 * sin(t); y = 0.5 + 0.25 * cos(t); label=Inner; }
+
+// F0 = A1;
+// F1 = A2;
+border F2(t=0.0, 0.4999) { x = 0.75 - 0.5 * cos(t * pi); y = 0.25 + 0.5 * sin(t * pi); label=Inner; }
+
+border G0(t=1.0/sqrt(2.0), 0.25) { x = 0.75; y = t; label=Inner; }
+border G1(t=0.75, 1.0 - 1.0/sqrt(2.0)) { x = t; y = 0.25; label=Inner; }
+border G2(t=pi - atan(sqrt(2.0) / 4.0), pi - atan(4.0 / sqrt(2.0))) { x = 1.0 + 0.75 * cos(t); y = 0.75 * sin(t); label=Inner; }
+
+
+// ### Meshes ###
+
+mesh MeshA = buildmesh(
+    OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
+    A0(InPoints) + A1(InPoints) + A2(InPoints) + A3(InPoints)
+);
+
+savemesh(MeshA, "result/A.msh");
+
+mesh MeshB = buildmesh(
+    OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
+    B0(InPoints) + B1(InPoints) + B2(InPoints) + B3(InPoints)
+);
+
+savemesh(MeshB, "result/B.msh");
+
+mesh MeshC = buildmesh(
+    OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
+    C0(InPoints) + A2(InPoints) + C2(InPoints)
+);
+
+savemesh(MeshC, "result/C.msh");
+
+mesh MeshD = buildmesh(
+    OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
+    A1(InPoints) + A2(InPoints) + D2(InPoints)
+);
+
+savemesh(MeshD, "result/D.msh");
+
+mesh MeshE = buildmesh(
+    OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
+    E0(InPoints * 8)
+);
+
+savemesh(MeshE, "result/E.msh");
+
+mesh MeshF = buildmesh(
+    OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
+    A1(InPoints) + A2(InPoints) + F2(InPoints * 4)
+);
+
+savemesh(MeshF, "result/F.msh");
+
+mesh MeshG = buildmesh(
+    OutRect1(OutPoints) + OutRect2(OutPoints) + OutGArc(OutPoints * 4) +
+    G0(InPoints) + G1(InPoints) + G2(InPoints * 4)
+);
+
+savemesh(MeshG, "result/G.msh");
+
+mesh MeshH = buildmesh(
+    OutHr(OutPoints) + OutRect2(OutPoints) + OutHl(OutPoints) +
+    C0(InPoints) + A2(InPoints) + C2(InPoints)
+);
+
+savemesh(MeshH, "result/H.msh");
+
+mesh MeshI = buildmesh(
+    OutI0(OutPoints) + OutI1(OutPoints) + OutI2(OutPoints) + OutI3(OutPoints) +
+    OutI4(OutPoints) + OutI5(OutPoints) + OutI6(OutPoints) + OutI7(OutPoints) +
+    B0(InPoints) + B1(InPoints) + B2(InPoints) + B3(InPoints)
+);
+
+savemesh(MeshI, "result/I.msh");
