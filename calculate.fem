@@ -2,10 +2,11 @@ string Capacitor = ARGV[ARGV.n - 1];
 
 int Outer = 1;
 int Inner = 2;
+int Integration = 3;
 
 mesh WorkMesh = readmesh("result/" + Capacitor + ".msh");
 
-fespace Vh(WorkMesh, P1);
+fespace Vh(WorkMesh, P2);
 Vh u, v;
 
 solve Poisson(u, v, solver=LU)
@@ -18,5 +19,7 @@ solve Poisson(u, v, solver=LU)
 
 plot(u, ps="result/" + Capacitor + ".eps");
 
-real flux = int1d(WorkMesh,Inner)(dx(u) * N.x + dy(u) * N.y);
+real flux = 0.0;
+
+flux = int1d(WorkMesh,Integration)(dx(u) * N.x + dy(u) * N.y);
 cout << "Flux of " + Capacitor + ": " << flux << "\n";

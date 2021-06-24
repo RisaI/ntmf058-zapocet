@@ -8,14 +8,14 @@ Je nutné vytvořit v adresáři složku `result`. Poté:
 1. (_volitelné_) skript `gen_png.sh` převede _eps_ soubory na _png_ soubory pomocí imagemagick `convert`
 
 # Výsledky
-* Flux of A: 8.83692
-* Flux of B: 5.29082
-* Flux of C: 5.7325
-* Flux of D: 6.31763
-* Flux of E: 7.47637
-* Flux of F: 7.70455
-* Flux of G: 7.45733
-* Flux of H: 12.1144
-* Flux of I: 5.62778
+* Flux of A: 10.2373
+* Flux of B: 6.63831
+* Flux of C: 7.42746
+* Flux of D: 7.97268
+* Flux of E: 8.172
+* Flux of F: 8.91824
+* Flux of G: 8.57108
+* Flux of H: 14.2191
+* Flux of I: 6.83848
 
 Nejvyšší kapacitu tak má kondenzátor H.

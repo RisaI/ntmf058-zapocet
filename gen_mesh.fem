@@ -1,10 +1,11 @@
 
-int OutPoints = -10;
-int InPoints  =  5;
+int OutPoints = -50;
+int InPoints  =  50;
 
 
 int Outer = 1;
 int Inner = 2;
+int Integration = 3;
 
 
 // ### Outer borders ###
@@ -59,61 +60,91 @@ border G0(t=1.0/sqrt(2.0), 0.25) { x = 0.75; y = t; label=Inner; }
 border G1(t=0.75, 1.0 - 1.0/sqrt(2.0)) { x = t; y = 0.25; label=Inner; }
 border G2(t=pi - atan(sqrt(2.0) / 4.0), pi - atan(4.0 / sqrt(2.0))) { x = 1.0 + 0.75 * cos(t); y = 0.75 * sin(t); label=Inner; }
 
+// ### Integration
+
+border IntA0(t=0.2, 0.8) { x = t;       y = 0.8;     label=Integration; }
+border IntA1(t=0.2, 0.8) { x = 0.8;     y = 1.0 - t; label=Integration; }
+border IntA2(t=0.2, 0.8) { x = 1.0 - t; y = 0.2;     label=Integration; }
+border IntA3(t=0.2, 0.8) { x = 0.2;     y = t;       label=Integration; }
+
+border IntHC0(t=0.0, 0.6) { x = 0.5 + t / 2.0; y = 0.8 - t; label=Integration; }
+border IntHC1(t=0.2, 0.8) { x = 1.00 - t; y = 0.2;          label=Integration; }
+border IntHC2(t=0.0, 0.6) { x = 0.2 + t / 2.0; y = 0.2 + t; label=Integration; }
+
+border IntG0(t=sqrt(0.6), 0.2) { x = 0.8; y = t;       label=Integration; }
+border IntG1(t=0.8, 1.0 - sqrt(0.6)) { x = t; y = 0.2; label=Integration; }
+border IntG2(t=pi - atan(1.0 / sqrt(15.0)), pi - atan(sqrt(15.0))) { x = 1.0 + 0.8 * cos(t); y = 0.8 * sin(t); label=Integration; }
 
 // ### Meshes ###
 
 mesh MeshA = buildmesh(
     OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
-    A0(InPoints) + A1(InPoints) + A2(InPoints) + A3(InPoints)
+    A0(InPoints) + A1(InPoints) + A2(InPoints) + A3(InPoints) +
+
+    IntA0(OutPoints) + IntA1(OutPoints) + IntA2(OutPoints) + IntA3(OutPoints)
 );
 
 savemesh(MeshA, "result/A.msh");
 
 mesh MeshB = buildmesh(
     OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
-    B0(InPoints) + B1(InPoints) + B2(InPoints) + B3(InPoints)
+    B0(InPoints) + B1(InPoints) + B2(InPoints) + B3(InPoints) +
+
+    IntA0(OutPoints) + IntA1(OutPoints) + IntA2(OutPoints) + IntA3(OutPoints)
 );
 
 savemesh(MeshB, "result/B.msh");
 
 mesh MeshC = buildmesh(
     OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
-    C0(InPoints) + A2(InPoints) + C2(InPoints)
+    C0(InPoints) + A2(InPoints) + C2(InPoints) +
+
+    IntHC0(OutPoints) + IntHC1(OutPoints) + IntHC2(OutPoints)
 );
 
 savemesh(MeshC, "result/C.msh");
 
 mesh MeshD = buildmesh(
     OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
-    A1(InPoints) + A2(InPoints) + D2(InPoints)
+    A1(InPoints) + A2(InPoints) + D2(InPoints) +
+
+    IntA0(OutPoints) + IntA1(OutPoints) + IntA2(OutPoints) + IntA3(OutPoints)
 );
 
 savemesh(MeshD, "result/D.msh");
 
 mesh MeshE = buildmesh(
     OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
-    E0(InPoints * 8)
+    E0(InPoints * 8) +
+
+    IntA0(OutPoints) + IntA1(OutPoints) + IntA2(OutPoints) + IntA3(OutPoints)
 );
 
 savemesh(MeshE, "result/E.msh");
 
 mesh MeshF = buildmesh(
     OutRect0(OutPoints) + OutRect1(OutPoints) + OutRect2(OutPoints) + OutRect3(OutPoints) +
-    A1(InPoints) + A2(InPoints) + F2(InPoints * 4)
+    A1(InPoints) + A2(InPoints) + F2(InPoints * 4) +
+
+    IntA0(OutPoints) + IntA1(OutPoints) + IntA2(OutPoints) + IntA3(OutPoints)
 );
 
 savemesh(MeshF, "result/F.msh");
 
 mesh MeshG = buildmesh(
     OutRect1(OutPoints) + OutRect2(OutPoints) + OutGArc(OutPoints * 4) +
-    G0(InPoints) + G1(InPoints) + G2(InPoints * 4)
+    G0(InPoints) + G1(InPoints) + G2(InPoints * 4) +
+
+    IntG0(OutPoints) + IntG1(OutPoints) + IntG2(OutPoints)
 );
 
 savemesh(MeshG, "result/G.msh");
 
 mesh MeshH = buildmesh(
     OutHr(OutPoints) + OutRect2(OutPoints) + OutHl(OutPoints) +
-    C0(InPoints) + A2(InPoints) + C2(InPoints)
+    C0(InPoints) + A2(InPoints) + C2(InPoints) +
+
+    IntHC0(OutPoints) + IntHC1(OutPoints) + IntHC2(OutPoints)
 );
 
 savemesh(MeshH, "result/H.msh");
@@ -121,7 +152,9 @@ savemesh(MeshH, "result/H.msh");
 mesh MeshI = buildmesh(
     OutI0(OutPoints) + OutI1(OutPoints) + OutI2(OutPoints) + OutI3(OutPoints) +
     OutI4(OutPoints) + OutI5(OutPoints) + OutI6(OutPoints) + OutI7(OutPoints) +
-    B0(InPoints) + B1(InPoints) + B2(InPoints) + B3(InPoints)
+    B0(InPoints) + B1(InPoints) + B2(InPoints) + B3(InPoints) +
+
+    IntA0(OutPoints) + IntA1(OutPoints) + IntA2(OutPoints) + IntA3(OutPoints)
 );
 
 savemesh(MeshI, "result/I.msh");
